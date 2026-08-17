@@ -91,7 +91,7 @@ shape = SubResource("PlayerShape")
 position = Vector3(-8.35, 4.75, 0)
 rotation_degrees = Vector3(-20, -90, 0)
 current = true
-fov = 62.0
+fov = 60.0
 
 [node name="Defender1" type="CharacterBody3D" parent="." groups=["defender"]]
 position = Vector3(-1.0, 1.1, -4.4)

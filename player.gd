@@ -43,6 +43,8 @@ var display_number := "7"
 var display_role := "BALANCED"
 var special_name := "VOLT STORM"
 var authored_model: Node3D = null
+var sprite_visual: Sprite3D = null
+var sprite_base_y: float = 0.34
 
 @onready var cam:Camera3D = $Camera3D
 var cam_base_pos := Vector3(-6.7,3.5,0)
@@ -122,6 +124,7 @@ func apply_character(id:String) -> void:
     visor_mat=_mat(Color(0.02,0.12,0.18,1),c["visor"],2.4)
     skin_mat=_mat(Color(0.34,0.13,0.07,1))
 
+    sprite_visual = null
     var model_path: String = c["model"]
     if ResourceLoader.exists(model_path):
         var packed = load(model_path)
@@ -131,11 +134,39 @@ func apply_character(id:String) -> void:
             authored_model.position = Vector3(0,-0.84,0)
             add_child(authored_model)
         else:
-            _build_rig(id)
+            _build_game_sprite(id)
     else:
-        _build_rig(id)
+        _build_game_sprite(id)
 
     character_changed.emit(id)
+
+func _build_game_sprite(id:String) -> void:
+    var sprite_path := "res://dex_game.png"
+    if id=="nikki":
+        sprite_path="res://nikki_game.png"
+    elif id=="mack":
+        sprite_path="res://mack_game.png"
+
+    if not ResourceLoader.exists(sprite_path):
+        _build_rig(id)
+        return
+
+    var sprite:=Sprite3D.new()
+    sprite.name="HDGameplaySprite"
+    sprite.texture=load(sprite_path)
+    sprite.pixel_size=0.0037
+    if id=="nikki":
+        sprite.pixel_size=0.00355
+    elif id=="mack":
+        sprite.pixel_size=0.0040
+    sprite.position=Vector3(0,sprite_base_y,0)
+    sprite.billboard=1
+    sprite.shaded=false
+    sprite.double_sided=true
+    sprite.render_priority=2
+    add_child(sprite)
+    sprite_visual=sprite
+    authored_model=sprite
 
 func _build_rig(id:String) -> void:
     rig=Node3D.new()
@@ -267,6 +298,22 @@ func _physics_process(delta:float) -> void:
     _camera_fx(delta)
 
 func _animate(delta:float) -> void:
+    if sprite_visual != null:
+        var sprite_speed:=Vector2(velocity.x,velocity.z).length()
+        run_clock+=delta*(8.0+sprite_speed)
+        var bob:=0.025
+        if sprite_speed>0.3:
+            bob=0.075
+        if dash_timer>0.0:
+            bob=0.11
+        sprite_visual.position.y=sprite_base_y+abs(sin(run_clock*2.0))*bob
+        var lean_target:=-0.08 if dash_timer>0.0 else 0.0
+        sprite_visual.rotation.z=lerp(sprite_visual.rotation.z,lean_target,min(1.0,delta*9.0))
+        var pulse:=1.0
+        if mutation_timer>0.0:
+            pulse=1.0+0.045*sin(Time.get_ticks_msec()/70.0)
+        sprite_visual.scale=Vector3(pulse,pulse,pulse)
+        return
     if authored_model != null:
         return
     if rig==null:return
@@ -296,8 +343,8 @@ func _animate(delta:float) -> void:
     visor_mat.emission_energy_multiplier=(4.3*pulse if mutation_timer>0.0 else 2.4)
 
 func _camera_fx(delta:float) -> void:
-    var target_fov:=76.0 if dash_timer>0.0 else 68.0
-    if mutation_timer>0.0: target_fov=80.0
+    var target_fov:=66.0 if dash_timer>0.0 else 60.0
+    if mutation_timer>0.0: target_fov=70.0
     cam.fov=lerp(cam.fov,target_fov,min(1.0,delta*7.0))
     var jitter:=Vector3.ZERO
     if shake>0.0:

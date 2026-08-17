@@ -20,6 +20,8 @@ var right_arm:Node3D
 var left_leg:Node3D
 var right_leg:Node3D
 var run_clock:=0.0
+var sprite_visual:Sprite3D
+var sprite_base_y:=0.31
 
 func _ready()->void:
     home_position=global_position
@@ -59,6 +61,24 @@ func _sphere(parent:Node,pos:Vector3,r:float,mat:Material)->MeshInstance3D:
     mesh.radius=r;mesh.height=r*2.0;mesh.material=mat;n.mesh=mesh;n.position=pos;parent.add_child(n);return n
 
 func _build()->void:
+    if ResourceLoader.exists("res://defender_game.png"):
+        var sprite:=Sprite3D.new()
+        sprite.name="HDDefenderSprite"
+        sprite.texture=load("res://defender_game.png")
+        sprite.pixel_size=0.00365
+        if archetype=="speed":
+            sprite.pixel_size=0.00335
+        elif archetype=="bruiser":
+            sprite.pixel_size=0.00415
+        sprite.position=Vector3(0,sprite_base_y,0)
+        sprite.billboard=1
+        sprite.shaded=false
+        sprite.double_sided=true
+        sprite.render_priority=1
+        add_child(sprite)
+        sprite_visual=sprite
+        return
+
     var black:=_mat(Color(0.02,0.018,0.028,1))
     var hot:=_mat(Color(0.34,0.01,0.18,1),Color(1.0,0.03,0.55,1),1.7)
     var acid:=_mat(Color(0.22,0.55,0.03,1),Color(0.55,1.0,0.04,1),1.4)
@@ -142,9 +162,17 @@ func _physics_process(delta:float)->void:
             hit_cooldown=1.0
 
 func _animate(delta:float)->void:
-    if rig==null:return
     var speed:=Vector2(velocity.x,velocity.z).length()
     run_clock+=delta*(8.0+speed)
+    if sprite_visual!=null:
+        var bob:=0.025 if speed<0.3 else 0.065
+        sprite_visual.position.y=sprite_base_y+abs(sin(run_clock*2.0))*bob
+        var tilt:=0.0
+        if stunned>0.0:
+            tilt=0.14*sin(run_clock*2.0)
+        sprite_visual.rotation.z=lerp(sprite_visual.rotation.z,tilt,min(1.0,delta*10.0))
+        return
+    if rig==null:return
     var swing:=sin(run_clock)
     var stride:=0.65 if speed>0.3 else 0.08
     left_arm.rotation.z=swing*stride
