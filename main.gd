@@ -21,6 +21,10 @@ var restart_button:Button
 var current_character:="dex"
 var loading_timer:=0.0
 var callout_timer:=0.0
+var touch_left:=false
+var touch_right:=false
+var touch_up:=false
+var touch_down:=false
 
 func _ready()->void:
     _build_ui()
@@ -32,18 +36,60 @@ func _ready()->void:
     match_controller.major_event.connect(_major_event)
 
 func _wire()->void:
-    $HUDRoot/Touch/Left.button_down.connect(func():player.set_touch_direction(Vector2(-1,0)))
-    $HUDRoot/Touch/Left.button_up.connect(func():player.set_touch_direction(Vector2.ZERO))
-    $HUDRoot/Touch/Right.button_down.connect(func():player.set_touch_direction(Vector2(1,0)))
-    $HUDRoot/Touch/Right.button_up.connect(func():player.set_touch_direction(Vector2.ZERO))
-    $HUDRoot/Touch/Up.button_down.connect(func():player.set_touch_direction(Vector2(0,-1)))
-    $HUDRoot/Touch/Up.button_up.connect(func():player.set_touch_direction(Vector2.ZERO))
-    $HUDRoot/Touch/Down.button_down.connect(func():player.set_touch_direction(Vector2(0,1)))
-    $HUDRoot/Touch/Down.button_up.connect(func():player.set_touch_direction(Vector2.ZERO))
+    $HUDRoot/Touch.mouse_filter=Control.MOUSE_FILTER_IGNORE
+
+    $HUDRoot/Touch/Left.button_down.connect(func(): touch_left=true; _update_touch_direction())
+    $HUDRoot/Touch/Left.button_up.connect(func(): touch_left=false; _update_touch_direction())
+    $HUDRoot/Touch/Right.button_down.connect(func(): touch_right=true; _update_touch_direction())
+    $HUDRoot/Touch/Right.button_up.connect(func(): touch_right=false; _update_touch_direction())
+    $HUDRoot/Touch/Up.button_down.connect(func(): touch_up=true; _update_touch_direction())
+    $HUDRoot/Touch/Up.button_up.connect(func(): touch_up=false; _update_touch_direction())
+    $HUDRoot/Touch/Down.button_down.connect(func(): touch_down=true; _update_touch_direction())
+    $HUDRoot/Touch/Down.button_up.connect(func(): touch_down=false; _update_touch_direction())
+
     $HUDRoot/Touch/Dash.pressed.connect(player.fire_dash)
     $HUDRoot/Touch/Smash.pressed.connect(player.fire_smash)
     $HUDRoot/Touch/Mutation.pressed.connect(player.fire_mutation)
 
+    _style_touch_button($HUDRoot/Touch/Left,Color(0.08,0.08,0.10,0.62),Color(0.55,1.0,0.04,0.85))
+    _style_touch_button($HUDRoot/Touch/Right,Color(0.08,0.08,0.10,0.62),Color(0.55,1.0,0.04,0.85))
+    _style_touch_button($HUDRoot/Touch/Up,Color(0.08,0.08,0.10,0.62),Color(0.55,1.0,0.04,0.85))
+    _style_touch_button($HUDRoot/Touch/Down,Color(0.08,0.08,0.10,0.62),Color(0.55,1.0,0.04,0.85))
+    _style_touch_button($HUDRoot/Touch/Dash,Color(0.02,0.08,0.10,0.68),Color(0.05,0.88,1.0,0.95))
+    _style_touch_button($HUDRoot/Touch/Smash,Color(0.12,0.01,0.07,0.70),Color(1.0,0.03,0.52,0.95))
+    _style_touch_button($HUDRoot/Touch/Mutation,Color(0.06,0.10,0.01,0.70),Color(0.55,1.0,0.03,0.95))
+
+func _update_touch_direction()->void:
+    var x:=0.0
+    var y:=0.0
+    if touch_left: x-=1.0
+    if touch_right: x+=1.0
+    if touch_up: y-=1.0
+    if touch_down: y+=1.0
+    var direction:=Vector2(x,y)
+    if direction.length()>1.0:
+        direction=direction.normalized()
+    player.set_touch_direction(direction)
+
+func _style_touch_button(button:Button,fill:Color,border:Color)->void:
+    var normal:=StyleBoxFlat.new()
+    normal.bg_color=fill
+    normal.border_color=border
+    normal.set_border_width_all(2)
+    normal.corner_radius_top_left=22
+    normal.corner_radius_top_right=22
+    normal.corner_radius_bottom_left=22
+    normal.corner_radius_bottom_right=22
+    button.add_theme_stylebox_override("normal",normal)
+
+    var pressed:=normal.duplicate()
+    pressed.bg_color=Color(fill.r,fill.g,fill.b,min(1.0,fill.a+0.20))
+    pressed.border_color=Color(1,1,1,0.95)
+    button.add_theme_stylebox_override("pressed",pressed)
+
+    var hover:=normal.duplicate()
+    button.add_theme_stylebox_override("hover",hover)
+    button.add_theme_font_size_override("font_size",18)
 func _build_ui()->void:
     ui=$HUDRoot
 
@@ -67,6 +113,7 @@ func _build_ui()->void:
     title.position=Vector2(28,12);title.size=Vector2(950,34)
     title.add_theme_color_override("font_color",Color(1,0.05,0.55,1))
     title.add_theme_font_size_override("font_size",26)
+    title.mouse_filter=Control.MOUSE_FILTER_IGNORE
     top.add_child(title)
 
     score_label=Label.new()
@@ -74,6 +121,7 @@ func _build_ui()->void:
     score_label.position=Vector2(28,49);score_label.size=Vector2(540,34)
     score_label.add_theme_color_override("font_color",Color(0.60,1.0,0.08,1))
     score_label.add_theme_font_size_override("font_size",25)
+    score_label.mouse_filter=Control.MOUSE_FILTER_IGNORE
     top.add_child(score_label)
 
     down_label=Label.new()
@@ -82,6 +130,7 @@ func _build_ui()->void:
     down_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
     down_label.add_theme_color_override("font_color",Color(0.10,0.82,1.0,1))
     down_label.add_theme_font_size_override("font_size",19)
+    down_label.mouse_filter=Control.MOUSE_FILTER_IGNORE
     top.add_child(down_label)
 
     var card:=ColorRect.new()
@@ -94,12 +143,14 @@ func _build_ui()->void:
     portrait.position=Vector2(12,15);portrait.size=Vector2(118,150)
     portrait.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
     portrait.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+    portrait.mouse_filter=Control.MOUSE_FILTER_IGNORE
     card.add_child(portrait)
 
     status_label=Label.new()
     status_label.position=Vector2(138,18);status_label.size=Vector2(245,150)
     status_label.add_theme_color_override("font_color",Color(0.62,1.0,0.08,1))
     status_label.add_theme_font_size_override("font_size",18)
+    status_label.mouse_filter=Control.MOUSE_FILTER_IGNORE
     card.add_child(status_label)
 
     callout=Label.new()
@@ -108,6 +159,7 @@ func _build_ui()->void:
     callout.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
     callout.add_theme_color_override("font_color",Color(1,0.05,0.55,1))
     callout.add_theme_font_size_override("font_size",54)
+    callout.mouse_filter=Control.MOUSE_FILTER_IGNORE
     gameplay_hud.add_child(callout)
 
     restart_button=Button.new()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://main.gd" id="1_main"]
 [ext_resource type="Script" path="res://input_setup.gd" id="2_input"]
@@ -10,12 +10,24 @@
 [ext_resource type="Script" path="res://pickup.gd" id="8_pickup"]
 [ext_resource type="Script" path="res://audio_manager.gd" id="9_audio"]
 
+[sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
+sky_top_color = Color(0.004, 0.010, 0.022, 1)
+sky_horizon_color = Color(0.115, 0.010, 0.105, 1)
+ground_bottom_color = Color(0.003, 0.002, 0.006, 1)
+ground_horizon_color = Color(0.040, 0.006, 0.035, 1)
+sun_angle_max = 16.0
+sun_curve = 0.08
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMat")
+
 [sub_resource type="Environment" id="Env"]
-background_mode = 1
-background_color = Color(0.004, 0.002, 0.008, 1)
+background_mode = 2
+sky = SubResource("Sky")
 ambient_light_source = 3
-ambient_light_color = Color(0.26, 0.03, 0.30, 1)
-ambient_light_energy = 1.28
+ambient_light_color = Color(0.22, 0.035, 0.26, 1)
+ambient_light_energy = 1.20
+reflected_light_source = 2
 
 [sub_resource type="BoxMesh" id="GroundMesh"]
 size = Vector3(36.0, 0.20, 20.25)
@@ -88,13 +100,13 @@ script = ExtResource("5_player")
 shape = SubResource("PlayerShape")
 
 [node name="Camera3D" type="Camera3D" parent="Player"]
-position = Vector3(-7.55, 5.15, 0)
-rotation_degrees = Vector3(-24, -90, 0)
+position = Vector3(-7.4, 4.25, 0)
+rotation_degrees = Vector3(-15.0, -90, 0)
 current = true
-fov = 66.0
+fov = 68.0
 
 [node name="Defender1" type="CharacterBody3D" parent="." groups=["defender"]]
-position = Vector3(0.0, 1.1, -5.2)
+position = Vector3(-0.2, 1.1, -5.4)
 script = ExtResource("6_defender")
 target_path = NodePath("../Player")
 archetype = "speed"
@@ -104,7 +116,7 @@ lane_bias = -1.2
 shape = SubResource("DefenderShape")
 
 [node name="Defender2" type="CharacterBody3D" parent="." groups=["defender"]]
-position = Vector3(2.3, 1.1, -2.6)
+position = Vector3(2.1, 1.1, -2.7)
 script = ExtResource("6_defender")
 target_path = NodePath("../Player")
 archetype = "chaser"
@@ -114,7 +126,7 @@ lane_bias = -0.5
 shape = SubResource("DefenderShape")
 
 [node name="Defender3" type="CharacterBody3D" parent="." groups=["defender"]]
-position = Vector3(4.8, 1.1, 0.0)
+position = Vector3(5.2, 1.1, 0.0)
 script = ExtResource("6_defender")
 target_path = NodePath("../Player")
 archetype = "bruiser"
@@ -124,7 +136,7 @@ lane_bias = 0.6
 shape = SubResource("DefenderShape")
 
 [node name="Defender4" type="CharacterBody3D" parent="." groups=["defender"]]
-position = Vector3(6.2, 1.1, 4.2)
+position = Vector3(2.1, 1.1, 2.7)
 script = ExtResource("6_defender")
 target_path = NodePath("../Player")
 archetype = "chaser"
@@ -134,7 +146,7 @@ lane_bias = 1.4
 shape = SubResource("DefenderShape")
 
 [node name="Defender5" type="CharacterBody3D" parent="." groups=["defender"]]
-position = Vector3(8.2, 1.1, -3.0)
+position = Vector3(8.2, 1.1, 4.9)
 script = ExtResource("6_defender")
 target_path = NodePath("../Player")
 archetype = "speed"
