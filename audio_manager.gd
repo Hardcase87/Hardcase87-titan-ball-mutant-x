@@ -7,10 +7,10 @@ var mutation_player: AudioStreamPlayer
 var score_player: AudioStreamPlayer
 
 func _ready() -> void:
-    hit_player = _make_player("res://audio/sfx/hit.wav", -4.0)
-    dash_player = _make_player("res://audio/sfx/dash.wav", -7.0)
-    mutation_player = _make_player("res://audio/sfx/mutation.wav", -5.0)
-    score_player = _make_player("res://audio/sfx/score.wav", -4.0)
+    hit_player = _make_player("res://hit.wav", -4.0)
+    dash_player = _make_player("res://dash.wav", -7.0)
+    mutation_player = _make_player("res://mutation.wav", -5.0)
+    score_player = _make_player("res://score.wav", -4.0)
 
 func _make_player(path: String, volume_db: float) -> AudioStreamPlayer:
     var p = AudioStreamPlayer.new()

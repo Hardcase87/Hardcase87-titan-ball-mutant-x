@@ -1,14 +1,14 @@
 [gd_scene load_steps=14 format=3]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" path="res://scripts/input_setup.gd" id="2_input"]
-[ext_resource type="Script" path="res://scripts/character_db.gd" id="3_char"]
-[ext_resource type="Script" path="res://scripts/arena_visual.gd" id="4_arena"]
-[ext_resource type="Script" path="res://scripts/player.gd" id="5_player"]
-[ext_resource type="Script" path="res://scripts/defender.gd" id="6_defender"]
-[ext_resource type="Script" path="res://scripts/match_controller.gd" id="7_match"]
-[ext_resource type="Script" path="res://scripts/pickup.gd" id="8_pickup"]
-[ext_resource type="Script" path="res://scripts/audio_manager.gd" id="9_audio"]
+[ext_resource type="Script" path="res://main.gd" id="1_main"]
+[ext_resource type="Script" path="res://input_setup.gd" id="2_input"]
+[ext_resource type="Script" path="res://character_db.gd" id="3_char"]
+[ext_resource type="Script" path="res://arena_visual.gd" id="4_arena"]
+[ext_resource type="Script" path="res://player.gd" id="5_player"]
+[ext_resource type="Script" path="res://defender.gd" id="6_defender"]
+[ext_resource type="Script" path="res://match_controller.gd" id="7_match"]
+[ext_resource type="Script" path="res://pickup.gd" id="8_pickup"]
+[ext_resource type="Script" path="res://audio_manager.gd" id="9_audio"]
 
 [sub_resource type="Environment" id="Env"]
 background_mode = 1

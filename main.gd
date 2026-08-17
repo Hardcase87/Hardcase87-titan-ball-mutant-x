@@ -227,13 +227,13 @@ func _character_card(id:String,pos:Vector2)->void:
     panel.add_child(b)
 
 func _load_optional_images()->void:
-    var title_path:="res://art/ui/title/mutantx_title.png"
+    var title_path:="res://mutantx_title.png"
     if ResourceLoader.exists(title_path):
         title_image.texture=load(title_path)
 
-    var load_path:="res://art/ui/loading/team_loading.png"
+    var load_path:="res://team_loading.png"
     if not ResourceLoader.exists(load_path):
-        load_path="res://art/ui/loading/pit_loading.png"
+        load_path="res://pit_loading.png"
     if ResourceLoader.exists(load_path):
         loading_image.texture=load(load_path)
 

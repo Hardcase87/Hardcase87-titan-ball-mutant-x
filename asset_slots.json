@@ -1,0 +1,11 @@
+{
+  "res://art/stadium/thepit.png": "HD field/turf texture. Auto-applied to playable field.",
+  "res://art/stadium/pit_backdrop.png": "Sludge Stadium / The Pit backdrop. Auto-placed at far end.",
+  "res://art/characters/dex/dex_portrait.png": "Dex portrait for character select + HUD.",
+  "res://art/characters/nikki/nikki_portrait.png": "Nikki portrait for character select + HUD.",
+  "res://art/characters/mack/mack_portrait.png": "Mack portrait for character select + HUD.",
+  "res://art/ui/title/mutantx_title.png": "Main title-screen art.",
+  "res://art/ui/loading/pit_loading.png": "Enter The Pit loading art.",
+  "res://art/ui/loading/team_loading.png": "Reserved for later match-vs loading.",
+  "res://art/ui/promo/coming_soon.png": "Reserved promo / website / ad slot."
+}
