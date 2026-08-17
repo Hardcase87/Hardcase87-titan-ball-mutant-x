@@ -112,16 +112,21 @@ func _physics_process(delta:float)->void:
             var desired:=to_target.normalized()*chase_speed
 
             # Cheap separation steering keeps the defensive wall readable.
-            var separation:=Vector3.ZERO
-            for other in get_tree().get_nodes_in_group("defender"):
-                if other==self or other==null:
+            # Explicit types are used here for Xogot/Godot 4.6 compatibility.
+            var separation: Vector3 = Vector3.ZERO
+            var defenders: Array[Node] = get_tree().get_nodes_in_group("defender")
+            for other_node: Node in defenders:
+                if other_node == self:
                     continue
-                var away:=global_position-other.global_position
-                away.y=0
-                var dist:=away.length()
-                if dist>0.01 and dist<1.65:
-                    separation+=away.normalized()*(1.65-dist)*3.2
-            desired+=separation
+                if not other_node is CharacterBody3D:
+                    continue
+                var other_body: CharacterBody3D = other_node as CharacterBody3D
+                var away: Vector3 = global_position - other_body.global_position
+                away.y = 0.0
+                var dist: float = away.length()
+                if dist > 0.01 and dist < 1.65:
+                    separation += away.normalized() * (1.65 - dist) * 3.2
+            desired += separation
 
             velocity.x=move_toward(velocity.x,desired.x,acceleration*delta)
             velocity.z=move_toward(velocity.z,desired.z,acceleration*delta)
