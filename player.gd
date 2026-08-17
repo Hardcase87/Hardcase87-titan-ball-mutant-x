@@ -154,11 +154,11 @@ func _build_game_sprite(id:String) -> void:
     var sprite:=Sprite3D.new()
     sprite.name="HDGameplaySprite"
     sprite.texture=load(sprite_path)
-    sprite.pixel_size=0.0037
+    sprite.pixel_size=0.00245
     if id=="nikki":
-        sprite.pixel_size=0.00355
+        sprite.pixel_size=0.00235
     elif id=="mack":
-        sprite.pixel_size=0.0040
+        sprite.pixel_size=0.00275
     sprite.position=Vector3(0,sprite_base_y,0)
     sprite.billboard=1
     sprite.shaded=false
@@ -343,8 +343,8 @@ func _animate(delta:float) -> void:
     visor_mat.emission_energy_multiplier=(4.3*pulse if mutation_timer>0.0 else 2.4)
 
 func _camera_fx(delta:float) -> void:
-    var target_fov:=66.0 if dash_timer>0.0 else 60.0
-    if mutation_timer>0.0: target_fov=70.0
+    var target_fov:=72.0 if dash_timer>0.0 else 66.0
+    if mutation_timer>0.0: target_fov=76.0
     cam.fov=lerp(cam.fov,target_fov,min(1.0,delta*7.0))
     var jitter:=Vector3.ZERO
     if shake>0.0:

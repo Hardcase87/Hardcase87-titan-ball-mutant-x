@@ -91,9 +91,15 @@ func _build_the_pit() -> void:
         var bg:=Sprite3D.new()
         bg.name="SludgeStadiumHorizon"
         bg.texture=backdrop
-        bg.position=Vector3(17.70,6.10,0)
+        bg.position=Vector3(16.65,5.20,0)
         bg.rotation_degrees=Vector3(0,-90,0)
-        bg.pixel_size=0.0160
+        bg.pixel_size=0.0310
         bg.modulate=Color(1,1,1,0.96)
         bg.no_depth_test=false
         add_child(bg)
+
+    # Dark far-wall closes the arena beneath the skyline and kills the floating-image look.
+    var wall_mat:=StandardMaterial3D.new()
+    wall_mat.albedo_color=Color(0.008,0.004,0.012,1)
+    wall_mat.roughness=0.92
+    _box("FarDarkWall",Vector3(17.75,3.0,0),Vector3(0.20,6.0,20.8),wall_mat)

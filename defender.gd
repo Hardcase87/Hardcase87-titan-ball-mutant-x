@@ -65,11 +65,11 @@ func _build()->void:
         var sprite:=Sprite3D.new()
         sprite.name="HDDefenderSprite"
         sprite.texture=load("res://defender_game.png")
-        sprite.pixel_size=0.00365
+        sprite.pixel_size=0.00225
         if archetype=="speed":
-            sprite.pixel_size=0.00335
+            sprite.pixel_size=0.00210
         elif archetype=="bruiser":
-            sprite.pixel_size=0.00415
+            sprite.pixel_size=0.00255
         sprite.position=Vector3(0,sprite_base_y,0)
         sprite.billboard=1
         sprite.shaded=false
@@ -144,8 +144,8 @@ func _physics_process(delta:float)->void:
                 var away: Vector3 = global_position - other_body.global_position
                 away.y = 0.0
                 var dist: float = away.length()
-                if dist > 0.01 and dist < 1.65:
-                    separation += away.normalized() * (1.65 - dist) * 3.2
+                if dist > 0.01 and dist < 2.15:
+                    separation += away.normalized() * (2.15 - dist) * 4.2
             desired += separation
 
             velocity.x=move_toward(velocity.x,desired.x,acceleration*delta)

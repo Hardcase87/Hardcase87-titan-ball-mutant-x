@@ -51,10 +51,14 @@ func _build_ui()->void:
     gameplay_hud=Control.new()
     gameplay_hud.name="GameplayHUD"
     gameplay_hud.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    gameplay_hud.mouse_filter=Control.MOUSE_FILTER_IGNORE
     ui.add_child(gameplay_hud)
+    # Touch controls must render ABOVE the full-screen passive HUD.
+    ui.move_child(gameplay_hud,0)
 
     var top:=ColorRect.new()
     top.color=Color(0.01,0.01,0.018,0.86)
+    top.mouse_filter=Control.MOUSE_FILTER_IGNORE
     top.position=Vector2(218,22);top.size=Vector2(1100,122)
     gameplay_hud.add_child(top)
 
@@ -82,6 +86,7 @@ func _build_ui()->void:
 
     var card:=ColorRect.new()
     card.color=Color(0.01,0.012,0.018,0.88)
+    card.mouse_filter=Control.MOUSE_FILTER_IGNORE
     card.position=Vector2(320,810);card.size=Vector2(400,180)
     gameplay_hud.add_child(card)
 

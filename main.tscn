@@ -88,13 +88,13 @@ script = ExtResource("5_player")
 shape = SubResource("PlayerShape")
 
 [node name="Camera3D" type="Camera3D" parent="Player"]
-position = Vector3(-8.35, 4.75, 0)
-rotation_degrees = Vector3(-20, -90, 0)
+position = Vector3(-7.55, 5.15, 0)
+rotation_degrees = Vector3(-24, -90, 0)
 current = true
-fov = 60.0
+fov = 66.0
 
 [node name="Defender1" type="CharacterBody3D" parent="." groups=["defender"]]
-position = Vector3(-1.0, 1.1, -4.4)
+position = Vector3(0.0, 1.1, -5.2)
 script = ExtResource("6_defender")
 target_path = NodePath("../Player")
 archetype = "speed"
@@ -104,7 +104,7 @@ lane_bias = -1.2
 shape = SubResource("DefenderShape")
 
 [node name="Defender2" type="CharacterBody3D" parent="." groups=["defender"]]
-position = Vector3(1.6, 1.1, -1.7)
+position = Vector3(2.3, 1.1, -2.6)
 script = ExtResource("6_defender")
 target_path = NodePath("../Player")
 archetype = "chaser"
@@ -114,7 +114,7 @@ lane_bias = -0.5
 shape = SubResource("DefenderShape")
 
 [node name="Defender3" type="CharacterBody3D" parent="." groups=["defender"]]
-position = Vector3(4.0, 1.1, 1.5)
+position = Vector3(4.8, 1.1, 0.0)
 script = ExtResource("6_defender")
 target_path = NodePath("../Player")
 archetype = "bruiser"
