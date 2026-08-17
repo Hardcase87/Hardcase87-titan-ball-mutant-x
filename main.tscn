@@ -1,0 +1,213 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/input_setup.gd" id="2_input"]
+[ext_resource type="Script" path="res://scripts/character_db.gd" id="3_char"]
+[ext_resource type="Script" path="res://scripts/arena_visual.gd" id="4_arena"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="5_player"]
+[ext_resource type="Script" path="res://scripts/defender.gd" id="6_defender"]
+[ext_resource type="Script" path="res://scripts/match_controller.gd" id="7_match"]
+[ext_resource type="Script" path="res://scripts/pickup.gd" id="8_pickup"]
+[ext_resource type="Script" path="res://scripts/audio_manager.gd" id="9_audio"]
+
+[sub_resource type="Environment" id="Env"]
+background_mode = 1
+background_color = Color(0.004, 0.002, 0.008, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.26, 0.03, 0.30, 1)
+ambient_light_energy = 1.28
+
+[sub_resource type="BoxMesh" id="GroundMesh"]
+size = Vector3(33.2, 0.20, 18.6)
+
+[sub_resource type="BoxShape3D" id="GroundShape"]
+size = Vector3(33.2, 0.20, 18.6)
+
+[sub_resource type="CapsuleShape3D" id="PlayerShape"]
+radius = 0.55
+height = 1.85
+
+[sub_resource type="CapsuleShape3D" id="DefenderShape"]
+radius = 0.58
+height = 1.92
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_main")
+
+[node name="InputSetup" type="Node" parent="."]
+script = ExtResource("2_input")
+
+[node name="CharacterDB" type="Node" parent="."]
+script = ExtResource("3_char")
+
+[node name="AudioManager" type="Node" parent="."]
+script = ExtResource("9_audio")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Env")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-52, -28, 0)
+light_color = Color(0.62, 0.18, 0.84, 1)
+light_energy = 1.70
+shadow_enabled = true
+
+[node name="PinkLight" type="OmniLight3D" parent="."]
+position = Vector3(-3, 8, -6)
+light_color = Color(1, 0.02, 0.48, 1)
+light_energy = 6.0
+omni_range = 18.0
+
+[node name="AcidLight" type="OmniLight3D" parent="."]
+position = Vector3(8, 6, 5)
+light_color = Color(0.45, 1, 0.04, 1)
+light_energy = 5.0
+omni_range = 16.0
+
+[node name="Arena" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena"]
+shape = SubResource("GroundShape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Arena"]
+mesh = SubResource("GroundMesh")
+visible = false
+
+[node name="ArenaVisual" type="Node3D" parent="."]
+script = ExtResource("4_arena")
+
+[node name="MatchController" type="Node" parent="."]
+script = ExtResource("7_match")
+player_path = NodePath("../Player")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+position = Vector3(-12, 1.1, 0)
+script = ExtResource("5_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("PlayerShape")
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+position = Vector3(-7.7, 4.15, 0)
+rotation_degrees = Vector3(-18, -90, 0)
+current = true
+fov = 64.0
+
+[node name="Defender1" type="CharacterBody3D" parent="." groups=["defender"]]
+position = Vector3(-1.0, 1.1, -4.4)
+script = ExtResource("6_defender")
+target_path = NodePath("../Player")
+archetype = "speed"
+lane_bias = -1.2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Defender1"]
+shape = SubResource("DefenderShape")
+
+[node name="Defender2" type="CharacterBody3D" parent="." groups=["defender"]]
+position = Vector3(1.6, 1.1, -1.7)
+script = ExtResource("6_defender")
+target_path = NodePath("../Player")
+archetype = "chaser"
+lane_bias = -0.5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Defender2"]
+shape = SubResource("DefenderShape")
+
+[node name="Defender3" type="CharacterBody3D" parent="." groups=["defender"]]
+position = Vector3(4.0, 1.1, 1.5)
+script = ExtResource("6_defender")
+target_path = NodePath("../Player")
+archetype = "bruiser"
+lane_bias = 0.6
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Defender3"]
+shape = SubResource("DefenderShape")
+
+[node name="Defender4" type="CharacterBody3D" parent="." groups=["defender"]]
+position = Vector3(6.2, 1.1, 4.2)
+script = ExtResource("6_defender")
+target_path = NodePath("../Player")
+archetype = "chaser"
+lane_bias = 1.4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Defender4"]
+shape = SubResource("DefenderShape")
+
+[node name="Defender5" type="CharacterBody3D" parent="." groups=["defender"]]
+position = Vector3(8.2, 1.1, -3.0)
+script = ExtResource("6_defender")
+target_path = NodePath("../Player")
+archetype = "speed"
+lane_bias = -1.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Defender5"]
+shape = SubResource("DefenderShape")
+
+[node name="SkullJuice" type="Area3D" parent="."]
+position = Vector3(-2, 0.7, -4.5)
+script = ExtResource("8_pickup")
+kind = "juice"
+
+[node name="MutantLoops" type="Area3D" parent="."]
+position = Vector3(5.5, 0.7, 4.2)
+script = ExtResource("8_pickup")
+kind = "mutation"
+
+[node name="HUDRoot" type="CanvasLayer" parent="."]
+
+[node name="Touch" type="Control" parent="HUDRoot"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Left" type="Button" parent="HUDRoot/Touch"]
+offset_left = 36.0
+offset_top = 720.0
+offset_right = 136.0
+offset_bottom = 820.0
+text = "◀"
+
+[node name="Right" type="Button" parent="HUDRoot/Touch"]
+offset_left = 236.0
+offset_top = 720.0
+offset_right = 336.0
+offset_bottom = 820.0
+text = "▶"
+
+[node name="Up" type="Button" parent="HUDRoot/Touch"]
+offset_left = 136.0
+offset_top = 620.0
+offset_right = 236.0
+offset_bottom = 720.0
+text = "▲"
+
+[node name="Down" type="Button" parent="HUDRoot/Touch"]
+offset_left = 136.0
+offset_top = 720.0
+offset_right = 236.0
+offset_bottom = 820.0
+text = "▼"
+
+[node name="Dash" type="Button" parent="HUDRoot/Touch"]
+offset_left = 1190.0
+offset_top = 690.0
+offset_right = 1310.0
+offset_bottom = 810.0
+text = "DASH"
+
+[node name="Smash" type="Button" parent="HUDRoot/Touch"]
+offset_left = 1320.0
+offset_top = 640.0
+offset_right = 1440.0
+offset_bottom = 760.0
+text = "SMASH"
+
+[node name="Mutation" type="Button" parent="HUDRoot/Touch"]
+offset_left = 1450.0
+offset_top = 690.0
+offset_right = 1570.0
+offset_bottom = 810.0
+text = "MUTATE"
