@@ -1,20 +1,27 @@
-# TITAN BALL: MUTANT X — MASTER 1.0 FLAT iPAD EDITION
+# TITAN BALL: MUTANT X — FINISHED VISUAL MASTER
 
-Built specifically for GitHub uploads from iPad Safari and Xogot.
+Flat GitHub/iPad/Xogot edition.
 
-All runtime files live at the repository ROOT. No folders are required.
+## Integrated
+- Full-screen 1536x1024 iPad presentation
+- New HD toxic skull field
+- Enlarged playable field and camera framing
+- Larger Sludge Stadium horizon
+- New Dex Volt #7 portrait
+- New Nikki Nitro #94 portrait
+- New Mack Maul #99 portrait
+- Full-screen Mutant X title artwork
+- Full-screen Titans vs Mutants loading artwork
+- Stadium-backed character select
+- Existing playable core preserved
+- Xogot-safe defender repair included
 
-Required root files include:
-- project.godot
-- main.tscn
-- all .gd scripts
-- all PNG artwork
-- all WAV sound effects
+## GitHub
+All runtime files stay at repository root.
 
-Future authored models may also live at root:
+## Future true current-generation character/stadium assets
+Optional authored models can later be added at root:
 - dex.glb
 - nikki.glb
 - mack.glb
 - the_pit.glb
-
-Xogot: Download from GitHub and paste the repository URL.

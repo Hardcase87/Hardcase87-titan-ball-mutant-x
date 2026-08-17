@@ -4,13 +4,13 @@
 config_version=5
 
 [application]
-config/name="Titan Ball: Mutant X — MASTER 1.0 FLAT iPad"
+config/name="Titan Ball: Mutant X — FINISHED VISUAL MASTER"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 
 [display]
-window/size/viewport_width=1600
-window/size/viewport_height=900
+window/size/viewport_width=1536
+window/size/viewport_height=1024
 window/stretch/mode="canvas_items"
 
 [rendering]

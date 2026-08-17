@@ -55,7 +55,7 @@ func _build_ui()->void:
 
     var top:=ColorRect.new()
     top.color=Color(0.01,0.01,0.018,0.86)
-    top.position=Vector2(300,18);top.size=Vector2(1000,120)
+    top.position=Vector2(218,22);top.size=Vector2(1100,122)
     gameplay_hud.add_child(top)
 
     var title:=Label.new()
@@ -82,23 +82,23 @@ func _build_ui()->void:
 
     var card:=ColorRect.new()
     card.color=Color(0.01,0.012,0.018,0.88)
-    card.position=Vector2(390,670);card.size=Vector2(380,170)
+    card.position=Vector2(320,810);card.size=Vector2(400,180)
     gameplay_hud.add_child(card)
 
     portrait=TextureRect.new()
-    portrait.position=Vector2(12,18);portrait.size=Vector2(110,140)
+    portrait.position=Vector2(12,15);portrait.size=Vector2(118,150)
     portrait.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
     portrait.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
     card.add_child(portrait)
 
     status_label=Label.new()
-    status_label.position=Vector2(130,18);status_label.size=Vector2(215,145)
+    status_label.position=Vector2(138,18);status_label.size=Vector2(245,150)
     status_label.add_theme_color_override("font_color",Color(0.62,1.0,0.08,1))
     status_label.add_theme_font_size_override("font_size",18)
     card.add_child(status_label)
 
     callout=Label.new()
-    callout.position=Vector2(480,205);callout.size=Vector2(640,110)
+    callout.position=Vector2(448,195);callout.size=Vector2(640,110)
     callout.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
     callout.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
     callout.add_theme_color_override("font_color",Color(1,0.05,0.55,1))
@@ -107,7 +107,7 @@ func _build_ui()->void:
 
     restart_button=Button.new()
     restart_button.text="RESTART GAME"
-    restart_button.position=Vector2(1190,150);restart_button.size=Vector2(210,55)
+    restart_button.position=Vector2(1220,165);restart_button.size=Vector2(210,55)
     restart_button.visible=false
     restart_button.pressed.connect(match_controller.restart_game)
     gameplay_hud.add_child(restart_button)
@@ -121,65 +121,53 @@ func _build_ui()->void:
     # Title screen
     title_screen=_panel_screen("TitleScreen")
     title_image=TextureRect.new()
-    title_image.position=Vector2(160,35);title_image.size=Vector2(1280,700)
+    title_image.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     title_image.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
-    title_image.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+    title_image.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_COVERED
+    title_image.mouse_filter=Control.MOUSE_FILTER_IGNORE
     title_screen.add_child(title_image)
 
-    var big:=Label.new()
-    big.text="TITAN BALL:\nMUTANT X"
-    big.position=Vector2(350,120);big.size=Vector2(900,260)
-    big.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
-    big.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
-    big.add_theme_color_override("font_color",Color(1,0.04,0.55,1))
-    big.add_theme_font_size_override("font_size",72)
-    title_screen.add_child(big)
-
-    var pit:=Label.new()
-    pit.text="ENTER THE PIT  //  SLUDGE STADIUM"
-    pit.position=Vector2(450,410);pit.size=Vector2(700,50)
-    pit.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
-    pit.add_theme_color_override("font_color",Color(0.60,1.0,0.08,1))
-    pit.add_theme_font_size_override("font_size",25)
-    title_screen.add_child(pit)
-
+    # The artwork already contains the full title treatment.
+    # Tap anywhere to enter character select.
     var start:=Button.new()
-    start.text="ENTER THE PIT"
-    start.position=Vector2(650,720);start.size=Vector2(300,70)
+    start.text=""
+    start.flat=true
+    start.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     start.pressed.connect(_show_select)
     title_screen.add_child(start)
 
     # Select screen
     select_screen=_panel_screen("SelectScreen")
+    var select_bg:=TextureRect.new()
+    select_bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    select_bg.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
+    select_bg.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_COVERED
+    select_bg.mouse_filter=Control.MOUSE_FILTER_IGNORE
+    select_bg.modulate=Color(0.42,0.42,0.42,1)
+    if ResourceLoader.exists("res://pit_backdrop.png"):
+        select_bg.texture=load("res://pit_backdrop.png")
+    select_screen.add_child(select_bg)
+
     var sel_title:=Label.new()
     sel_title.text="CHOOSE YOUR MUTANT"
-    sel_title.position=Vector2(470,85);sel_title.size=Vector2(660,80)
+    sel_title.position=Vector2(438,82);sel_title.size=Vector2(660,80)
     sel_title.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
     sel_title.add_theme_color_override("font_color",Color(1,0.05,0.55,1))
     sel_title.add_theme_font_size_override("font_size",46)
     select_screen.add_child(sel_title)
 
-    _character_card("dex",Vector2(250,215))
-    _character_card("nikki",Vector2(625,215))
-    _character_card("mack",Vector2(1000,215))
+    _character_card("dex",Vector2(180,205))
+    _character_card("nikki",Vector2(598,205))
+    _character_card("mack",Vector2(1016,205))
 
     # Loading screen
     loading_screen=_panel_screen("LoadingScreen")
     loading_image=TextureRect.new()
-    loading_image.position=Vector2(180,80);loading_image.size=Vector2(1240,650)
+    loading_image.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     loading_image.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
-    loading_image.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+    loading_image.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_COVERED
+    loading_image.mouse_filter=Control.MOUSE_FILTER_IGNORE
     loading_screen.add_child(loading_image)
-
-    var load_lbl:=Label.new()
-    load_lbl.name="LoadingLabel"
-    load_lbl.text="ENTERING THE PIT...\nSLUDGE STADIUM"
-    load_lbl.position=Vector2(400,320);load_lbl.size=Vector2(800,140)
-    load_lbl.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
-    load_lbl.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
-    load_lbl.add_theme_color_override("font_color",Color(0.60,1.0,0.08,1))
-    load_lbl.add_theme_font_size_override("font_size",42)
-    loading_screen.add_child(load_lbl)
 
     _load_optional_images()
 
@@ -198,11 +186,11 @@ func _character_card(id:String,pos:Vector2)->void:
     var c:=MutantXCharacterDB.get_character(id)
     var panel:=ColorRect.new()
     panel.color=Color(0.02,0.02,0.035,0.96)
-    panel.position=pos;panel.size=Vector2(320,430)
+    panel.position=pos;panel.size=Vector2(340,560)
     select_screen.add_child(panel)
 
     var tex:=TextureRect.new()
-    tex.position=Vector2(20,20);tex.size=Vector2(280,235)
+    tex.position=Vector2(20,18);tex.size=Vector2(300,330)
     tex.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
     tex.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
     var path:String=c["portrait"]
@@ -214,7 +202,7 @@ func _character_card(id:String,pos:Vector2)->void:
         c["name"],c["number"],c["role"],
         int(c["speed"]*10),int(c["power"]*70),c["hp"],c["special"]
     ]
-    l.position=Vector2(20,260);l.size=Vector2(280,115)
+    l.position=Vector2(20,355);l.size=Vector2(300,125)
     l.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
     l.add_theme_color_override("font_color",c["primary"])
     l.add_theme_font_size_override("font_size",18)
@@ -222,7 +210,7 @@ func _character_card(id:String,pos:Vector2)->void:
 
     var b:=Button.new()
     b.text="SELECT"
-    b.position=Vector2(75,375);b.size=Vector2(170,42)
+    b.position=Vector2(80,500);b.size=Vector2(180,46)
     b.pressed.connect(func():_choose_character(id))
     panel.add_child(b)
 

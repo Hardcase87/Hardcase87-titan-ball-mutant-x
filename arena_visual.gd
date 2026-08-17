@@ -80,7 +80,7 @@ func _build_the_pit() -> void:
         turf_mat.albedo_color = Color(1,1,1,1)
 
     # Main playable surface. 16:9 texture is framed rather than heavily stretched.
-    _box("HD_Turf", Vector3(0,0.115,0), Vector3(34.0,0.035,19.0), turf_mat)
+    _box("HD_Turf", Vector3(0,0.115,0), Vector3(36.0,0.035,20.25), turf_mat)
 
     var pink = _make_material(Color(0.12,0.005,0.07,1), Color(1.0,0.02,0.52,1), 1.65, 0.25, 0.42)
     var acid = _make_material(Color(0.08,0.13,0.02,1), Color(0.52,1.0,0.02,1), 1.25, 0.05, 0.55)
@@ -88,24 +88,24 @@ func _build_the_pit() -> void:
     var metal = _make_material(Color(0.015,0.015,0.022,1), Color(0.07,0.00,0.06,1), 0.15, 0.55, 0.36)
 
     # Low dark stadium rails frame the field without blocking the art.
-    _box("NearRailL", Vector3(0,0.55,-9.58), Vector3(34.5,0.22,0.22), pink)
-    _box("NearRailR", Vector3(0,0.55,9.58), Vector3(34.5,0.22,0.22), pink)
-    _box("FarRail", Vector3(17.25,0.65,0), Vector3(0.22,0.24,19.4), acid)
+    _box("NearRailL", Vector3(0,0.55,-10.35), Vector3(36.4,0.22,0.22), pink)
+    _box("NearRailR", Vector3(0,0.55,10.35), Vector3(36.4,0.22,0.22), pink)
+    _box("FarRail", Vector3(18.05,0.65,0), Vector3(0.22,0.24,20.7), acid)
 
     # Small field-side industrial structures only. No giant purple grandstands.
     for side_value in [-1,1]:
         var side = float(side_value)
-        var z = 10.45 * side
-        _box("Wall_%d" % side_value, Vector3(1.0,1.0,z), Vector3(32.0,1.7,0.75), metal)
+        var z = 11.10 * side
+        _box("Wall_%d" % side_value, Vector3(1.0,1.0,z), Vector3(34.0,1.7,0.75), metal)
         for x in [-13,-8,-3,2,7,12]:
             _cylinder("Sludge_%d_%d" % [side_value,x], Vector3(float(x),1.55,z - side*0.35), 0.22,2.2, acid)
 
     # Far goal only; keep it out of the player's camera.
-    _cylinder("GoalStem", Vector3(16.15,1.65,0), 0.06,3.1, cyan)
-    _box("GoalCross", Vector3(16.15,2.8,0), Vector3(0.10,0.10,3.6), cyan)
+    _cylinder("GoalStem", Vector3(17.1,1.65,0), 0.06,3.1, cyan)
+    _box("GoalCross", Vector3(17.1,2.8,0), Vector3(0.10,0.10,3.6), cyan)
 
-    _label("SKULL JUICE", Vector3(-8.0,2.0,-10.1), Vector3(0,0,0), Color(0.55,1,0.08,1), 38)
-    _label("MUTANT LOOPS", Vector3(7.0,2.0,-10.1), Vector3(0,0,0), Color(1,0.05,0.55,1), 38)
+    _label("SKULL JUICE", Vector3(-8.0,2.0,-10.85), Vector3(0,0,0), Color(0.55,1,0.08,1), 38)
+    _label("MUTANT LOOPS", Vector3(7.0,2.0,-10.85), Vector3(0,0,0), Color(1,0.05,0.55,1), 38)
 
     # Huge stadium horizon. This is the main Sludge Stadium visual.
     var backdrop = _load_tex("res://pit_backdrop.png")
@@ -113,9 +113,9 @@ func _build_the_pit() -> void:
         var bg = Sprite3D.new()
         bg.name = "SludgeStadiumBackdrop"
         bg.texture = backdrop
-        bg.position = Vector3(17.65,7.25,0)
+        bg.position = Vector3(17.15,7.0,0)
         bg.rotation_degrees = Vector3(0,-90,0)
-        bg.pixel_size = 0.020
+        bg.pixel_size = 0.030
         bg.modulate = Color(1,1,1,1)
         bg.no_depth_test = false
         add_child(bg)
@@ -126,7 +126,7 @@ func _build_the_pit() -> void:
         l.text = "THE PIT  //  SLUDGE STADIUM"
         l.font_size = 42
         l.modulate = Color(1,0.05,0.55,0.82)
-        l.position = Vector3(4.0,2.6,10.0*float(side_value))
+        l.position = Vector3(4.0,2.6,10.75*float(side_value))
         l.rotation_degrees = Vector3(0,0,0) if side_value < 0 else Vector3(0,180,0)
         l.outline_size = 8
         add_child(l)

@@ -260,8 +260,8 @@ func _physics_process(delta:float) -> void:
     velocity.y=-0.1 if is_on_floor() else velocity.y-28.0*delta
 
     move_and_slide()
-    global_position.x=clamp(global_position.x,-15.4,15.4)
-    global_position.z=clamp(global_position.z,-8.2,8.2)
+    global_position.x=clamp(global_position.x,-16.7,16.7)
+    global_position.z=clamp(global_position.z,-9.25,9.25)
 
     _animate(delta)
     _camera_fx(delta)
