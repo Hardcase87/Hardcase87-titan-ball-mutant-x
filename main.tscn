@@ -1,39 +1,28 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=15 format=3]
 
-[ext_resource type="Script" path="res://main.gd" id="1_main"]
-[ext_resource type="Script" path="res://input_setup.gd" id="2_input"]
-[ext_resource type="Script" path="res://character_db.gd" id="3_char"]
-[ext_resource type="Script" path="res://arena_visual.gd" id="4_arena"]
-[ext_resource type="Script" path="res://player.gd" id="5_player"]
-[ext_resource type="Script" path="res://defender.gd" id="6_defender"]
-[ext_resource type="Script" path="res://match_controller.gd" id="7_match"]
-[ext_resource type="Script" path="res://pickup.gd" id="8_pickup"]
-[ext_resource type="Script" path="res://audio_manager.gd" id="9_audio"]
-
-[sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
-sky_top_color = Color(0.004, 0.010, 0.022, 1)
-sky_horizon_color = Color(0.115, 0.010, 0.105, 1)
-ground_bottom_color = Color(0.003, 0.002, 0.006, 1)
-ground_horizon_color = Color(0.040, 0.006, 0.035, 1)
-sun_angle_max = 16.0
-sun_curve = 0.08
-
-[sub_resource type="Sky" id="Sky"]
-sky_material = SubResource("SkyMat")
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/input_setup.gd" id="2_input"]
+[ext_resource type="Script" path="res://scripts/character_db.gd" id="3_char"]
+[ext_resource type="Script" path="res://scripts/arena_visual.gd" id="4_arena"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="5_player"]
+[ext_resource type="Script" path="res://scripts/defender.gd" id="6_defender"]
+[ext_resource type="Script" path="res://scripts/match_controller.gd" id="7_match"]
+[ext_resource type="Script" path="res://scripts/pickup.gd" id="8_pickup"]
+[ext_resource type="Script" path="res://scripts/audio_manager.gd" id="9_audio"]
+[ext_resource type="Script" path="res://scripts/stadium_camera.gd" id="10_camera"]
 
 [sub_resource type="Environment" id="Env"]
-background_mode = 2
-sky = SubResource("Sky")
+background_mode = 1
+background_color = Color(0.004, 0.002, 0.008, 1)
 ambient_light_source = 3
-ambient_light_color = Color(0.22, 0.035, 0.26, 1)
-ambient_light_energy = 1.20
-reflected_light_source = 2
+ambient_light_color = Color(0.26, 0.03, 0.30, 1)
+ambient_light_energy = 1.28
 
 [sub_resource type="BoxMesh" id="GroundMesh"]
-size = Vector3(36.0, 0.20, 20.25)
+size = Vector3(33.2, 0.20, 18.6)
 
 [sub_resource type="BoxShape3D" id="GroundShape"]
-size = Vector3(36.0, 0.20, 20.25)
+size = Vector3(33.2, 0.20, 18.6)
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.55
@@ -99,14 +88,20 @@ script = ExtResource("5_player")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
 shape = SubResource("PlayerShape")
 
-[node name="Camera3D" type="Camera3D" parent="Player"]
-position = Vector3(-7.4, 4.25, 0)
-rotation_degrees = Vector3(-15.0, -90, 0)
+[node name="LegacyCamera3D" type="Camera3D" parent="Player"]
+position = Vector3(-7.7, 4.15, 0)
+rotation_degrees = Vector3(-18, -90, 0)
+current = false
+fov = 64.0
+
+[node name="StadiumCamera" type="Camera3D" parent="."]
+script = ExtResource("10_camera")
+target_path = NodePath("../Player")
 current = true
-fov = 68.0
+fov = 58.0
 
 [node name="Defender1" type="CharacterBody3D" parent="." groups=["defender"]]
-position = Vector3(-0.2, 1.1, -5.4)
+position = Vector3(-1.0, 1.1, -4.4)
 script = ExtResource("6_defender")
 target_path = NodePath("../Player")
 archetype = "speed"
@@ -116,7 +111,7 @@ lane_bias = -1.2
 shape = SubResource("DefenderShape")
 
 [node name="Defender2" type="CharacterBody3D" parent="." groups=["defender"]]
-position = Vector3(2.1, 1.1, -2.7)
+position = Vector3(1.6, 1.1, -1.7)
 script = ExtResource("6_defender")
 target_path = NodePath("../Player")
 archetype = "chaser"
@@ -126,7 +121,7 @@ lane_bias = -0.5
 shape = SubResource("DefenderShape")
 
 [node name="Defender3" type="CharacterBody3D" parent="." groups=["defender"]]
-position = Vector3(5.2, 1.1, 0.0)
+position = Vector3(4.0, 1.1, 1.5)
 script = ExtResource("6_defender")
 target_path = NodePath("../Player")
 archetype = "bruiser"
@@ -136,7 +131,7 @@ lane_bias = 0.6
 shape = SubResource("DefenderShape")
 
 [node name="Defender4" type="CharacterBody3D" parent="." groups=["defender"]]
-position = Vector3(2.1, 1.1, 2.7)
+position = Vector3(6.2, 1.1, 4.2)
 script = ExtResource("6_defender")
 target_path = NodePath("../Player")
 archetype = "chaser"
@@ -146,7 +141,7 @@ lane_bias = 1.4
 shape = SubResource("DefenderShape")
 
 [node name="Defender5" type="CharacterBody3D" parent="." groups=["defender"]]
-position = Vector3(8.2, 1.1, 4.9)
+position = Vector3(8.2, 1.1, -3.0)
 script = ExtResource("6_defender")
 target_path = NodePath("../Player")
 archetype = "speed"
@@ -176,50 +171,50 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Left" type="Button" parent="HUDRoot/Touch"]
-offset_left = 35.0
-offset_top = 875.0
-offset_right = 125.0
-offset_bottom = 965.0
+offset_left = 36.0
+offset_top = 720.0
+offset_right = 136.0
+offset_bottom = 820.0
 text = "◀"
 
 [node name="Right" type="Button" parent="HUDRoot/Touch"]
-offset_left = 215.0
-offset_top = 875.0
-offset_right = 305.0
-offset_bottom = 965.0
+offset_left = 236.0
+offset_top = 720.0
+offset_right = 336.0
+offset_bottom = 820.0
 text = "▶"
 
 [node name="Up" type="Button" parent="HUDRoot/Touch"]
-offset_left = 125.0
-offset_top = 785.0
-offset_right = 215.0
-offset_bottom = 875.0
+offset_left = 136.0
+offset_top = 620.0
+offset_right = 236.0
+offset_bottom = 720.0
 text = "▲"
 
 [node name="Down" type="Button" parent="HUDRoot/Touch"]
-offset_left = 125.0
-offset_top = 875.0
-offset_right = 215.0
-offset_bottom = 965.0
+offset_left = 136.0
+offset_top = 720.0
+offset_right = 236.0
+offset_bottom = 820.0
 text = "▼"
 
 [node name="Dash" type="Button" parent="HUDRoot/Touch"]
-offset_left = 1120.0
-offset_top = 845.0
-offset_right = 1240.0
-offset_bottom = 965.0
+offset_left = 1190.0
+offset_top = 690.0
+offset_right = 1310.0
+offset_bottom = 810.0
 text = "DASH"
 
 [node name="Smash" type="Button" parent="HUDRoot/Touch"]
-offset_left = 1260.0
-offset_top = 795.0
-offset_right = 1380.0
-offset_bottom = 915.0
+offset_left = 1320.0
+offset_top = 640.0
+offset_right = 1440.0
+offset_bottom = 760.0
 text = "SMASH"
 
 [node name="Mutation" type="Button" parent="HUDRoot/Touch"]
-offset_left = 1400.0
-offset_top = 845.0
-offset_right = 1520.0
-offset_bottom = 965.0
+offset_left = 1450.0
+offset_top = 690.0
+offset_right = 1570.0
+offset_bottom = 810.0
 text = "MUTATE"
