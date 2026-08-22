@@ -5,7 +5,7 @@ var phase: float = 0.0
 var pulse_materials: Array = []
 
 func _ready() -> void:
-    var stadium_model_path := "res://art/stadium/models/the_pit.glb"
+    var stadium_model_path := "res://the_pit.glb"
     if ResourceLoader.exists(stadium_model_path):
         var packed = load(stadium_model_path)
         if packed is PackedScene:
@@ -120,7 +120,7 @@ func _build_the_pit_2() -> void:
     # Existing gameplay collision remains untouched in main.tscn.
     # Visual field stays at the original scale so player / AI code does not need a rewrite.
     var turf_mat := _make_material(Color(0.04,0.09,0.035,1), Color(0.02,0.12,0.03,1), 0.05, 0.0, 0.92)
-    var turf_tex = _load_tex("res://art/stadium/thepit.png")
+    var turf_tex = _load_tex("res://thepit.png")
     if turf_tex != null:
         turf_mat.albedo_texture = turf_tex
         turf_mat.albedo_color = Color(1,1,1,1)
@@ -183,7 +183,7 @@ func _build_the_pit_2() -> void:
     _build_light_tower("LightSE", Vector3(19.8,0,13.0), metal, pink)
 
     # Keep existing skyline/backdrop as a distant layer only, not as the stadium itself.
-    var backdrop = _load_tex("res://art/stadium/pit_backdrop.png")
+    var backdrop = _load_tex("res://pit_backdrop.png")
     if backdrop != null:
         var bg := Sprite3D.new()
         bg.name = "TitanCityHorizon"
