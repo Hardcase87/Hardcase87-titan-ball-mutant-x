@@ -88,7 +88,7 @@ script = ExtResource("5_player")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
 shape = SubResource("PlayerShape")
 
-[node name="LegacyCamera3D" type="Camera3D" parent="Player"]
+[node name="Camera3D" type="Camera3D" parent="Player"]
 position = Vector3(-7.7, 4.15, 0)
 rotation_degrees = Vector3(-18, -90, 0)
 current = false
