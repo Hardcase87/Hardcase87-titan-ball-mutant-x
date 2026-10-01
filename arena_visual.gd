@@ -45,6 +45,18 @@ func _box(node_name: String, pos: Vector3, size: Vector3, mat: Material) -> Mesh
     add_child(n)
     return n
 
+func _barrier(node_name: String, pos: Vector3, size: Vector3) -> void:
+    # One simple collision hull per edge. The stands remain visual geometry.
+    var body := StaticBody3D.new()
+    body.name = node_name
+    body.position = pos
+    var shape := CollisionShape3D.new()
+    var box := BoxShape3D.new()
+    box.size = size
+    shape.shape = box
+    body.add_child(shape)
+    add_child(body)
+
 func _cylinder(node_name: String, pos: Vector3, radius: float, height: float, mat: Material) -> MeshInstance3D:
     var n := MeshInstance3D.new()
     n.name = node_name
@@ -163,7 +175,7 @@ func _build_concept_screen() -> void:
 
 func _build_the_pit_ttd() -> void:
     var turf_mat := _make_material(Color(0.04,0.09,0.035,1),Color(0.02,0.12,0.03,1),0.06,0.0,0.92)
-    var turf_tex = _load_tex("res://thepit.png")
+    var turf_tex = _load_tex("res://thepit_field.png")
     if turf_tex != null:
         turf_mat.albedo_texture = turf_tex
         turf_mat.albedo_color = Color(1,1,1,1)
@@ -183,6 +195,13 @@ func _build_the_pit_ttd() -> void:
     _box("SidelineR",Vector3(0,0.45,9.7),Vector3(34.8,0.58,0.24),pink)
     _box("EndWallA",Vector3(-17.45,0.52,0),Vector3(0.24,0.72,19.6),cyan)
     _box("EndWallB",Vector3(17.45,0.52,0),Vector3(0.24,0.72,19.6),acid)
+
+    # The low neon rails are readable from the camera; taller invisible hulls
+    # stop both player and defenders from walking through the stadium bowl.
+    _barrier("SidelineCollisionL",Vector3(0,1.6,-9.7),Vector3(34.8,3.2,0.35))
+    _barrier("SidelineCollisionR",Vector3(0,1.6,9.7),Vector3(34.8,3.2,0.35))
+    _barrier("EndCollisionA",Vector3(-17.45,1.6,0),Vector3(0.35,3.2,19.6))
+    _barrier("EndCollisionB",Vector3(17.45,1.6,0),Vector3(0.35,3.2,19.6))
 
     # Five-tier enclosed stadium.
     _build_side_bowl(-1.0,concrete,crowd,pink,acid)

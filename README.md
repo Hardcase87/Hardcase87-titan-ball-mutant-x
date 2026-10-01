@@ -1,4 +1,23 @@
-# TITAN BALL: MUTANT X — THE PIT MASTER 1.1
+# TITAN BALL: MUTANT X — THE PIT
+
+## Playable stadium repair
+
+Open `project.godot` in Godot 4.6 (or Xogot) and run the project. Choose a
+character, then advance up the field with W / up or the touch arrow. A/D move
+across the field; Space dashes, X smashes, and V mutates when the meter is full.
+The gamepad left stick and face buttons use the same actions.
+
+The Pit now has a real ground collision and four stadium boundary colliders.
+The chase camera starts inside the rear wall, follows the runner, and receives
+dash/mutation FOV and impact shake. The HUD advances from 0 to 100 yards at
+the goal line and updates during the run. Existing title, roster, pickups,
+sound, and TTD stadium art remain in use.
+
+This is still a small single-player run-to-the-end-zone prototype. Character
+art is billboard sprites until the authored GLB models are supplied; there is
+no passing, team AI, full match rules, or console build in this repository.
+PlayStation release requires a separate console port/build, platform approval,
+and certification. Verify the feel in Godot before planning that production work.
 
 This is the consolidated GitHub/Xogot redeploy build made from the user's deployed repository.
 

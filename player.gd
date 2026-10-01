@@ -46,14 +46,11 @@ var authored_model: Node3D = null
 var sprite_visual: Sprite3D = null
 var sprite_base_y: float = 0.34
 
-@onready var cam:Camera3D = $Camera3D
-var cam_base_pos := Vector3(-6.7,3.5,0)
 var shake := 0.0
 
 func _ready() -> void:
     add_to_group("player")
     MutantXInputSetup.ensure_actions()
-    cam_base_pos = cam.position
     apply_character(character_id)
 
 func _mat(color:Color, emission:Color=Color(0,0,0,1), energy:float=0.0) -> StandardMaterial3D:
@@ -252,7 +249,8 @@ func _physics_process(delta:float) -> void:
         if touch_vector.length()>input_vec.length():
             input_vec=touch_vector
 
-        var desired:=Vector3(input_vec.y,0.0,input_vec.x)
+        # The camera faces +X. Up on keyboard or touch advances toward the goal.
+        var desired:=Vector3(-input_vec.y,0.0,input_vec.x)
         var speed:=dash_speed if dash_timer>0.0 else base_speed
         var target:=desired.normalized()*speed if desired.length()>0.05 else Vector3.ZERO
         var rate:=acceleration if desired.length()>0.05 else friction
@@ -291,11 +289,7 @@ func _physics_process(delta:float) -> void:
     velocity.y=-0.1 if is_on_floor() else velocity.y-28.0*delta
 
     move_and_slide()
-    global_position.x=clamp(global_position.x,-16.7,16.7)
-    global_position.z=clamp(global_position.z,-9.25,9.25)
-
     _animate(delta)
-    _camera_fx(delta)
 
 func _animate(delta:float) -> void:
     if sprite_visual != null:
@@ -341,19 +335,6 @@ func _animate(delta:float) -> void:
     primary_mat.emission_energy_multiplier=(3.5*pulse if mutation_timer>0.0 else 1.5)
     secondary_mat.emission_energy_multiplier=(3.0*pulse if mutation_timer>0.0 else 1.15)
     visor_mat.emission_energy_multiplier=(4.3*pulse if mutation_timer>0.0 else 2.4)
-
-func _camera_fx(delta:float) -> void:
-    var target_fov:=73.0 if dash_timer>0.0 else 68.0
-    if mutation_timer>0.0: target_fov=77.0
-    cam.fov=lerp(cam.fov,target_fov,min(1.0,delta*7.0))
-    var jitter:=Vector3.ZERO
-    if shake>0.0:
-        jitter=Vector3(
-            sin(Time.get_ticks_msec()*0.045),
-            cos(Time.get_ticks_msec()*0.061),
-            sin(Time.get_ticks_msec()*0.053)
-        )*shake*0.13
-    cam.position=cam_base_pos+jitter
 
 func _smash_nearby() -> void:
     var hit:=false

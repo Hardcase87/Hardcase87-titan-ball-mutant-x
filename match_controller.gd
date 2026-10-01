@@ -15,6 +15,7 @@ var score:=0
 var drive:=1
 var start_x:=-12.0
 var touchdown_x:=13.2
+var yards_per_unit:=100.0 / (touchdown_x - start_x)
 var last_down_x:=-12.0
 var reset_timer:=0.0
 var message:="DRIVE 1"
@@ -44,8 +45,12 @@ func _physics_process(delta:float)->void:
         if reset_timer<=0.0:_reset_play()
         return
 
-    field_yards=max(0,int((player.global_position.x-start_x)*3.0))
-    yards_to_go=max(0,20-int((player.global_position.x-last_down_x)*3.0))
+    var next_field_yards:=clampi(int((player.global_position.x-start_x)*yards_per_unit),0,100)
+    var next_yards_to_go:=max(0,20-int((player.global_position.x-last_down_x)*yards_per_unit))
+    if next_field_yards!=field_yards or next_yards_to_go!=yards_to_go:
+        field_yards=next_field_yards
+        yards_to_go=next_yards_to_go
+        _emit()
 
     if player.global_position.x>=touchdown_x:
         score+=7
@@ -64,7 +69,7 @@ func _physics_process(delta:float)->void:
 
 func end_down(reason:String="TACKLED")->void:
     if reset_timer>0.0 or game_over or not active:return
-    var gained:=int((player.global_position.x-last_down_x)*3.0)
+    var gained:=int((player.global_position.x-last_down_x)*yards_per_unit)
     if gained>=20:
         down=1
         last_down_x=player.global_position.x
