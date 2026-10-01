@@ -45,8 +45,8 @@ func _physics_process(delta:float)->void:
         if reset_timer<=0.0:_reset_play()
         return
 
-    var next_field_yards:=clampi(int((player.global_position.x-start_x)*yards_per_unit),0,100)
-    var next_yards_to_go:=max(0,20-int((player.global_position.x-last_down_x)*yards_per_unit))
+    var next_field_yards: int = clampi(int((player.global_position.x-start_x)*yards_per_unit),0,100)
+    var next_yards_to_go: int = maxi(0,20-int((player.global_position.x-last_down_x)*yards_per_unit))
     if next_field_yards!=field_yards or next_yards_to_go!=yards_to_go:
         field_yards=next_field_yards
         yards_to_go=next_yards_to_go
